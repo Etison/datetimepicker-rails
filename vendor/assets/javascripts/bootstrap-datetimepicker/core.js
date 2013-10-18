@@ -27,7 +27,7 @@
 (function($) {
 
   // Picker object
-  var usev3 = false;
+  var usev3 = true;
   var smartPhone = (window.orientation != undefined);
   var DateTimePicker = function(element, options) {
     this.id = dpgId++;
@@ -67,7 +67,8 @@
       if (this.component) {
         icon = this.component.find('i');
       }
-      usev3 = icon.parent().hasClass('input-group-addon');
+      //usev3 = icon.parent().hasClass('input-group-addon');
+      usev3 = true
       if (this.pickTime) {
         if (icon && icon.length) this.timeIcon = icon.data('time-icon');
         if (!this.timeIcon) this.timeIcon = (usev3?'glyph':'') + 'icon-time';
