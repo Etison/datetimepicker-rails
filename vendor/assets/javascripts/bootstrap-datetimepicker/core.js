@@ -71,7 +71,7 @@
       usev3 = true
       if (this.pickTime) {
         if (icon && icon.length) this.timeIcon = icon.data('time-icon');
-        if (!this.timeIcon) this.timeIcon = (usev3?'glyph':'') + 'icon-time';
+        if (!this.timeIcon) this.timeIcon = (usev3?'glyph':'') + 'glyphicon-time';
         icon.addClass(this.timeIcon + (usev3?' glyphicon':''));
       }
       if (this.pickDate) {
