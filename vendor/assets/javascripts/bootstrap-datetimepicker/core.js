@@ -27,6 +27,7 @@
 (function($) {
 
   // Picker object
+  var usev3 = false;
   var smartPhone = (window.orientation != undefined);
   var DateTimePicker = function(element, options) {
     this.id = dpgId++;
@@ -49,18 +50,13 @@
         throw new Error('Must choose at least one picker');
       this.options = options;
       this.$element = $(element);
+      this.language = options.language in dates ? options.language : 'en'
       this.pickDate = options.pickDate;
       this.pickTime = options.pickTime;
       this.isInput = this.$element.is('input');
       this.component = false;
       if (this.$element.find('.input-append') || this.$element.find('.input-prepend'))
           this.component = this.$element.find('.add-on');
-      this.language = options.language
-      if (!this.language) {
-          if (this.isInput) this.language = this.$element.data('language');
-          else this.language = this.$element.find('input').data('language');
-          if (!this.language) this.language = 'en';
-      }
       this.format = options.format;
       if (!this.format) {
         if (this.isInput) this.format = this.$element.data('format');
@@ -71,16 +67,17 @@
       if (this.component) {
         icon = this.component.find('i');
       }
+      usev3 = icon.parent().hasClass('input-group-addon');
       if (this.pickTime) {
         if (icon && icon.length) this.timeIcon = icon.data('time-icon');
-        if (!this.timeIcon) this.timeIcon = 'icon-time';
-        icon.addClass(this.timeIcon);
+        if (!this.timeIcon) this.timeIcon = (usev3?'glyph':'') + 'icon-time';
+        icon.addClass(this.timeIcon + (usev3?' glyphicon':''));
       }
       if (this.pickDate) {
         if (icon && icon.length) this.dateIcon = icon.data('date-icon');
-        if (!this.dateIcon) this.dateIcon = 'icon-calendar';
+        if (!this.dateIcon) this.dateIcon = (usev3?'glyph':'') + 'icon-calendar';
         icon.removeClass(this.timeIcon);
-        icon.addClass(this.dateIcon);
+        icon.addClass(this.dateIcon + (usev3?' glyphicon':''));
       }
       this.widget = $(getTemplate(this.timeIcon, options.pickDate, options.pickTime, options.pick12HourFormat, options.pickSeconds, options.collapse)).appendTo('body');
       this.minViewMode = options.minViewMode||this.$element.data('date-minviewmode')||0;
@@ -112,12 +109,7 @@
         }
       }
       this.startViewMode = this.viewMode;
-      this.weekStart = options.weekStart;
-      if (!this.weekStart) {
-          if (this.isInput) this.weekStart = this.$element.data('date-weekstart');
-          else this.weekStart = this.$element.find('input').data('date-weekstart');
-          if (!this.weekStart) this.weekStart = 0;
-      }
+      this.weekStart = options.weekStart||this.$element.data('date-weekstart')||0;
       this.weekEnd = this.weekStart === 0 ? 6 : this.weekStart - 1;
       this.setStartDate(options.startDate || this.$element.data('date-startdate'));
       this.setEndDate(options.endDate || this.$element.data('date-enddate'));
@@ -973,7 +965,7 @@
           e.stopPropagation();
           var $this = $(this);
           var $parent = $this.closest('ul');
-          var expanded = $parent.find('.collapse.in');
+          var expanded = $parent.find('.in');
           var closed = $parent.find('.collapse:not(.in)');
 
           if (expanded && expanded.length) {
@@ -1164,7 +1156,7 @@
                 DPGlobal.template +
               '</div>' +
             '</li>' +
-            '<li class="picker-switch accordion-toggle"><a><i class="' + timeIcon + '"></i></a></li>' +
+            '<li class="picker-switch accordion-toggle"><a'+(usev3?' class="btn btn-info" style="width:100%"':'')+'><i class="' + (usev3?'glyphicon ':'') + timeIcon + '"></i></a></li>' +
             '<li' + (collapse ? ' class="collapse"' : '') + '>' +
               '<div class="timepicker">' +
                 TPGlobal.getTemplate(is12Hours, showSeconds) +
@@ -1260,12 +1252,12 @@
         (is12Hours ? ' data-hour-format="12"' : '') +
         '>' +
         '<tr>' +
-          '<td><a href="#" class="btn" data-action="incrementHours"><i class="icon-chevron-up"></i></a></td>' +
+          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="incrementHours"><i class="'+(usev3?'glyphicon glyph':'')+'icon-chevron-up"></i></a></td>' +
           '<td class="separator"></td>' +
-          '<td><a href="#" class="btn" data-action="incrementMinutes"><i class="icon-chevron-up"></i></a></td>' +
+          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="incrementMinutes"><i class="'+(usev3?'glyphicon glyph':'')+'icon-chevron-up"></i></a></td>' +
           (showSeconds ?
           '<td class="separator"></td>' +
-          '<td><a href="#" class="btn" data-action="incrementSeconds"><i class="icon-chevron-up"></i></a></td>': '')+
+          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="incrementSeconds"><i class="'+(usev3?'glyphicon glyph':'')+'icon-chevron-up"></i></a></td>': '')+
           (is12Hours ? '<td class="separator"></td>' : '') +
         '</tr>' +
         '<tr>' +
@@ -1282,12 +1274,12 @@
           '</td>' : '') +
         '</tr>' +
         '<tr>' +
-          '<td><a href="#" class="btn" data-action="decrementHours"><i class="icon-chevron-down"></i></a></td>' +
+          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="decrementHours"><i class="'+(usev3?'glyphicon glyph':'')+'icon-chevron-down"></i></a></td>' +
           '<td class="separator"></td>' +
-          '<td><a href="#" class="btn" data-action="decrementMinutes"><i class="icon-chevron-down"></i></a></td>' +
+          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="decrementMinutes"><i class="'+(usev3?'glyphicon glyph':'')+'icon-chevron-down"></i></a></td>' +
           (showSeconds ?
           '<td class="separator"></td>' +
-          '<td><a href="#" class="btn" data-action="decrementSeconds"><i class="icon-chevron-down"></i></a></td>': '') +
+          '<td><a href="#" class="btn'+(usev3?' btn-default':'')+'" data-action="decrementSeconds"><i class="'+(usev3?'glyphicon glyph':'')+'icon-chevron-down"></i></a></td>': '') +
           (is12Hours ? '<td class="separator"></td>' : '') +
         '</tr>' +
       '</table>' +
