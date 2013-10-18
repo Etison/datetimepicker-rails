@@ -55,8 +55,8 @@
       this.pickTime = options.pickTime;
       this.isInput = this.$element.is('input');
       this.component = false;
-      if (this.$element.find('.input-append') || this.$element.find('.input-prepend'))
-          this.component = this.$element.find('.add-on');
+      if (this.$element.find('.input-group') || this.$element.find('.input-prepend'))
+          this.component = this.$element.find('.input-group-addon');
       this.format = options.format;
       if (!this.format) {
         if (this.isInput) this.format = this.$element.data('format');
@@ -975,7 +975,7 @@
             expanded.collapse('hide');
             closed.collapse('show')
             $this.find('i').toggleClass(self.timeIcon + ' ' + self.dateIcon);
-            self.$element.find('.add-on i').toggleClass(self.timeIcon + ' ' + self.dateIcon);
+            self.$element.find('.input-group-addon i').toggleClass(self.timeIcon + ' ' + self.dateIcon);
           }
         });
       }
